@@ -492,3 +492,22 @@ body {
     background: rgba(12, 107, 255, 0.35);
     box-shadow: 0 0 35px rgba(77, 141, 255, 0.8);
 }
+
+/* Lighter version for phones */
+@media (max-width: 768px) {
+    .flower-container {
+        filter: drop-shadow(0 0 6cqi var(--glow-red));
+    }
+
+    .flower-circle {
+        filter: none;
+    }
+
+    .flower-light {
+        display: none;
+    }
+
+    .flower-container:nth-child(n+8) {
+        display: none;
+    }
+}
