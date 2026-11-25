@@ -73,8 +73,11 @@ window.addEventListener('resize', () => {
   height = canvas.height = window.innerHeight;
 });
 
+// Lighter effects on phones so it doesn't lag
+const isMobile = window.innerWidth < 768;
+
 const particles = [];
-const heartColors = ['#ff0c46', '#ff4d79', '#ff80bf', '#ff0033', '#e60039'];
+const heartColors = ['#0c6bff', '#4d8dff', '#80b3ff', '#0033ff', '#0039e6'];
 
 class HeartParticle {
   constructor(x, y, isBurst = false) {
@@ -110,7 +113,7 @@ class HeartParticle {
     ctx.globalAlpha = this.alpha;
     ctx.fillStyle = this.color;
     ctx.shadowColor = this.color;
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = isMobile ? 0 : 12;
 
     const s = this.size;
     ctx.beginPath();
@@ -126,12 +129,13 @@ class HeartParticle {
 }
 
 // Initial Ambient Floating Hearts
-for (let i = 0; i < 35; i++) {
+for (let i = 0; i < (isMobile ? 15 : 35); i++) {
   particles.push(new HeartParticle(Math.random() * width, Math.random() * height));
 }
 
 function spawnBurst(x, y, count = 20) {
-  for (let i = 0; i < count; i++) {
+  const n = isMobile ? Math.ceil(count / 2) : count;
+  for (let i = 0; i < n; i++) {
     particles.push(new HeartParticle(x, y, true));
   }
 }
@@ -235,7 +239,8 @@ function toggleMusic() {
   }
 }
 
-document.getElementById('music-btn').addEventListener('click', toggleMusic);
+// The "?." means: only do this if the button exists on the page
+document.getElementById('music-btn')?.addEventListener('click', toggleMusic);
 
 /* ========================================================
    Romantic Love Letter Modal & Typewriter
@@ -247,7 +252,7 @@ const typewriterText = document.getElementById('typewriter-text');
 const bloomBtn = document.getElementById('bloom-btn');
 const heartBurstBtn = document.getElementById('heart-burst-btn');
 
-const message = "Like a rose blooming under the soft crimson stars, my heart radiates love for you. May your days be filled with warmth, endless wonder, and sweet romantic moments.";
+const message = "Like a rose blooming under the soft sapphire stars, my heart radiates love for you. May your days be filled with warmth, endless wonder, and sweet romantic moments.";
 
 let typewriterIndex = 0;
 let typewriterTimer = null;
@@ -274,17 +279,17 @@ function closeLoveLetter() {
   clearTimeout(typewriterTimer);
 }
 
-noteBtn.addEventListener('click', openLoveLetter);
-closeModal.addEventListener('click', closeLoveLetter);
+noteBtn?.addEventListener('click', openLoveLetter);
+closeModal?.addEventListener('click', closeLoveLetter);
 
-loveModal.addEventListener('click', (e) => {
+loveModal?.addEventListener('click', (e) => {
   if (e.target === loveModal) closeLoveLetter();
 });
 
-bloomBtn.addEventListener('click', () => {
+bloomBtn?.addEventListener('click', () => {
   spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
 });
 
-heartBurstBtn.addEventListener('click', () => {
+heartBurstBtn?.addEventListener('click', () => {
   spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 35);
 });
